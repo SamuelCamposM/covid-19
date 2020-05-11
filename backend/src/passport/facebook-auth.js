@@ -1,6 +1,7 @@
-const passport = require("passport");
+import passport from "passport";
 const FacebookStrategy = require("passport-facebook").Strategy;
-const User = require("../models/user");
+import User from "../models/user";
+
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -11,9 +12,8 @@ passport.deserializeUser(async (id, done) => {
   done(null, user);
 });
 
-passport.use(
-  "sign-up-facebook",
-  new FacebookStrategy(
+// Estrategia para Registrarse
+passport.use("sign-up-facebook",new FacebookStrategy(
     {
       clientID: "el cliente id de facebook developer",
       clientSecret: "cliente secreto",
@@ -23,18 +23,14 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       const user = await User.findById(profile.id);
       if (user) {
-        return done(
-          null,
-          false
-        );
+        return done(null,false);
       } else {
-         console.log(profile);
         const { email, first_name, last_name } = profile._json;
         console.log("perfil ", profile);
         const user = new User();
         (user.email = email),
-          (user.firstname = first_name),
-          (user.last_name = last_name);
+        (user.firstname = first_name),
+        (user.last_name = last_name);
         user._id = profile.id;
         user.urlimage = profile.photos[0].value
         await user.save();
@@ -43,9 +39,9 @@ passport.use(
     }
   )
 );
-passport.use(
-  "sign-in-facebook",
-  new FacebookStrategy(
+
+// Estrategia para Iniciar Sesion
+passport.use("sign-in-facebook",new FacebookStrategy(
     {
       clientID: 2576357032629107,
       clientSecret: "3af7d2f7630645b43ef779c148e3ce8d",

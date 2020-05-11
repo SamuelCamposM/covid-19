@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt-nodejs')
+import mongoose, { model } from 'mongoose';
+import { hashSync, genSaltSync, compareSync } from 'bcrypt-nodejs';
 const {Schema} = mongoose;
 
 const userSchema = new Schema({
@@ -15,13 +15,13 @@ const userSchema = new Schema({
     elegido:{type:Boolean , default:false}
 }); 
 userSchema.methods.encryptPassword =  (password) => {
-    return   bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+    return   hashSync(password, genSaltSync(10))
 }
 userSchema.methods.comparePassword= function(password) {
-   return bcrypt.compareSync(password, this.password)
+   return compareSync(password, this.password)
 }
 
-module.exports = mongoose.model('users', userSchema);
+export default model('users', userSchema);
 
 
 

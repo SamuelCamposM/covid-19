@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+import { Schema, model } from "mongoose";
 
 const grupoSchema = new Schema({
   nombreGrupo: { type: String },
@@ -45,4 +44,4 @@ const grupoSchema = new Schema({
   ],
 });
 
-module.exports = mongoose.model("grupo", grupoSchema);
+export default model("grupo", grupoSchema);

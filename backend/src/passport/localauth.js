@@ -1,7 +1,7 @@
-const passport = require('passport');
+import passport from "passport";
 const LocalStrategy = require('passport-local').Strategy;
-const mongoose  = require('mongoose')
-const User = require('../models/user');
+import mongoose from "mongoose";
+import User from "../models/user";
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -12,6 +12,7 @@ passport.deserializeUser(async (id, done) => {
   done(null, user);
 });
 
+// Strategy para Registrarse
 passport.use('local-signup', new LocalStrategy({
   
   passReqToCallback: true
@@ -31,6 +32,8 @@ passport.use('local-signup', new LocalStrategy({
    done(null, newUser);
    }
  }));
+
+// Strategy para Iniciar Sesion
 
 passport.use('local-signin', new LocalStrategy({
 

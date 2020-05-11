@@ -1,8 +1,10 @@
-const router = require("express").Router();
-const passport = require("passport");
-const User = require("../models/user");
-const Grupo = require("../models/grupo.js");
-const mongoose  = require('mongoose')
+import { Router } from "express";
+const router = Router();
+import passport from "passport";
+import User from "../models/user";
+import Grupo from "../models/grupo";
+
+const URL = "http://localhost:8080"
 
 //rutas para facebook
 router.get(
@@ -17,9 +19,9 @@ router.get(
   passport.authenticate("sign-up-facebook", { session: true }),
   function (req, res) {
     if (req.user) {
-      res.redirect(`http://localhost:8080/perfil/${req.user.id}`);
+      res.redirect(`${URL}/perfil/${req.user.id}`);
     } else {
-      failureRedirect: `http://localhost:8080/registro-local/err`;
+      failureRedirect: `${URL}/registro-local/err`;
     }
   }
 );
@@ -29,9 +31,9 @@ router.get(
   passport.authenticate("sign-in-facebook", { session: true }),
   function (req, res) {
     if (req.user) {
-      res.redirect(`http://localhost:8080/perfil/${req.user.id}`);
+      res.redirect(`${URL}/perfil/${req.user.id}`);
     } else {
-      failureRedirect: `http://localhost:8080/`;
+      failureRedirect: `${URL}/`;
     }
   }
 );
@@ -42,13 +44,13 @@ router.post("/signup", function (req, res, next) {
       return next(err);
     }
     if (!user) {
-      return res.redirect(`http://localhost:8080/registro-local/err`);
+      return res.redirect(`${URL}/registro-local/err`);
     }
     req.logIn(user, function (err) {
       if (err) {
         return next(err);
       }
-      return res.redirect(`http://localhost:8080/perfil/${user.id}`);
+      return res.redirect(`${URL}/perfil/${user.id}`);
     });
   })(req, res, next);
 });
@@ -59,13 +61,13 @@ router.post("/signin", function (req, res, next) {
       return next(err);
     }
     if (!user) {
-      return res.redirect(`http://localhost:8080/login-err`);
+      return res.redirect(`${URL}/login-err`);
     }
     req.logIn(user, function (err) {
       if (err) {
         return next(err);
       }
-      return res.redirect(`http://localhost:8080/perfil/${user.id}`);
+      return res.redirect(`${URL}/perfil/${user.id}`);
     });
   })(req, res, next);
 });
@@ -102,7 +104,7 @@ router.post("/createGrupo", async (req, res) => {
 router.get("/logout", (req, res, next) => {
   req.logout(); //el  true de la sesion lo hace un false pero siempre se mantiene en false
   console.log(req.isAuthenticated());
-  res.redirect("http://localhost:8080/");
+  res.redirect(`${URL}/`);
   next();
 });
 
@@ -180,4 +182,4 @@ res.json({"mensaje": "se elimino el usuario correctamente"})
 })
 
 
-module.exports = router;  
+export default router;  

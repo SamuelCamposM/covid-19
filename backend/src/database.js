@@ -1,8 +1,16 @@
-const mongoose = require('mongoose')
-const {mongodb} = require('./keys')
+import { connect } from 'mongoose';
+import { mongodb } from './keys';
 
-mongoose.connect(mongodb.URI,{
-useNewUrlParser:true,
-useUnifiedTopology:true
-}).then(db => console.log('database is connected'))
-.catch(err => console.log(err));
+export function conectarDB(params) {
+    try {
+        connect(mongodb.URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
+        console.log('conectado a MongoDB');
+        
+    } catch (error) {
+       console.log(error);
+       
+    }
+}
